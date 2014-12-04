@@ -2,6 +2,7 @@ from operator import attrgetter
 
 from django import template
 from django.conf import settings
+from django.db.models.fields import FieldDoesNotExist
 from django.http import Http404
 from django.utils.translation import ugettext as _
 
@@ -76,14 +77,14 @@ class SortAnchorNode(template.Node):
             sortby = ''
 
         if 'dir' in getvars:
-            sortdir = sort_directions.get(getvars['dir'], sort_directions[''])
+            sortdir = getvars['dir']
             del getvars['dir']
         else:
-            sortdir = sort_directions['']
+            sortdir = ''
 
         if sortby == self.field:
-            getvars['dir'] = sortdir['inverse']
-            icon = sortdir['icon']
+            getvars['dir'] = sort_directions[sortdir]['inverse']
+            icon = sort_directions[sortdir]['icon']
         else:
             icon = ''
 
